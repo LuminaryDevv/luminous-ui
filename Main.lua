@@ -152,7 +152,7 @@ local BuiltInThemes = {
     Shadow = Color3.fromRGB(0, 0, 0),
     Outline = Color3.fromRGB(140, 70, 150),
     Icon = Color3.fromRGB(255, 120, 200),
-},
+    },
 	Amethyst = {
     Primary = Color3.fromRGB(60, 35, 70),
     Secondary = Color3.fromRGB(85, 50, 95),
@@ -226,19 +226,18 @@ local BuiltInThemes = {
 		Icon = Color3.fromRGB(255, 235, 180),
 	},
 	Violet = {
-		Violet = {
-    Primary = Color3.fromRGB(35, 25, 70),
-    Secondary = Color3.fromRGB(50, 35, 95)
-    Component = Color3.fromRGB(70, 50, 120),
-    Interactables = Color3.fromRGB(100, 75, 155),
-    Tab = Color3.fromRGB(150, 120, 255),
-    Title = Color3.fromRGB(200, 180, 255),
-    Description = Color3.fromRGB(145, 120, 210),
-    Shadow = Color3.fromRGB(0, 0, 0),
-    Outline = Color3.fromRGB(100, 70, 160),
-    Icon = Color3.fromRGB(170, 120, 255),
+	Primary = Color3.fromRGB(35, 25, 70),
+	Secondary = Color3.fromRGB(50, 35, 95),
+	Component = Color3.fromRGB(70, 50, 120),
+	Interactables = Color3.fromRGB(100, 75, 155),
+	Tab = Color3.fromRGB(150, 120, 255),
+	Title = Color3.fromRGB(200, 180, 255),
+	Description = Color3.fromRGB(145, 120, 210),
+	Shadow = Color3.fromRGB(0, 0, 0),
+	Outline = Color3.fromRGB(100, 70, 160),
+	Icon = Color3.fromRGB(170, 120, 255),
 },
-	},
+
 
 --// Services & Functions
 local Type, Blur = nil
