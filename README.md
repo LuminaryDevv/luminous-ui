@@ -1,5 +1,8 @@
-# ✨ Luminous UI By LuminaryDevv 
-# https://discord.gg/gKEHVx6pa -- JOIN OUR DISCORD FOR UPDATES AND SUPPORT
+# ✨ Luminous UI By LuminaryDevv
+# [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+# [![Roblox](https://img.shields.io/badge/Roblox-Executor%20UI-red)](https://github.com/LuminaryDevv/lates-lib)
+# join our discord
+# https://discord.gg/gKEHVx6pa
 A modern, lightweight UI framework for Roblox executor scripts. Built for performance and cross-executor compatibility.
 
 ## 🌟 Features
