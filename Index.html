@@ -1,1 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Luminous UI - 17 Theme Showcase</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #0a0a0a;
+            color: #e0e0e0;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 0;
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-top: 0;
+            margin-bottom: 40px;
+        }
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        .theme-card {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid #333;
+        }
+        .theme-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border-color: #555;
+        }
+        .theme-color {
+            width: 100%;
+            height: 60px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        .theme-name {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .theme-vibe {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .code-block {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 1px solid #333;
+        }
+        .code-block h3 {
+            margin-top: 0;
+        }
+        pre {
+            background: #0a0a0a;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 14px;
+            border: 1px solid #333;
+        }
+        code {
+            color: #0ff;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            border-top: 1px solid #333;
+        }
+        a {
+            color: #0ff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
 
+<h1>✨ Luminous UI</h1>
+<p class="subtitle">A modern UI framework for Roblox executor scripts with <strong>17 premium themes</strong></p>
+
+<!-- Theme Grid -->
+<h2>🎨 Theme Gallery</h2>
+<div class="theme-grid" id="themeGrid"></div>
+
+<!-- Installation & Usage -->
+<div class="code-block">
+    <h3>📦 Installation</h3>
+    <pre><code>local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/LuminaryDevv/luminous-ui/main/Main.lua"))()</code></pre>
+    
+    <h3>🚀 Quick Example</h3>
+    <pre><code>local Window = Library:CreateWindow({
+    Title = "My Script",
+    Size = UDim2.fromOffset(570, 370),
+    Theme = "Galaxy"
+})
+
+-- Change themes anytime
+Window:SetTheme("Diamond")
+Window:SetTheme("Gold")
+Window:SetTheme("Galaxy")</code></pre>
+</div>
+
+<div class="footer">
+    Made with ❤️ by LuminaryDevv | <a href="https://github.com/LuminaryDevv/luminous-ui" target="_blank">GitHub</a>
+</div>
+
+<script>
+    // Theme data with actual colors from your library
+    const themes = [
+        { name: "Diamond", vibe: "Cyan glow", primary: "#0a1928", secondary: "#0f2337", accent: "#00ffff" },
+        { name: "Gold", vibe: "True gold", primary: "#322818", secondary: "#50411c", accent: "#ffdc00" },
+        { name: "Silver", vibe: "Metallic silver", primary: "#464b55", secondary: "#5f646e", accent: "#c8cdd7" },
+        { name: "Ruby", vibe: "Deep red", primary: "#3c1419", secondary: "#50191f", accent: "#ff5064" },
+        { name: "Emerald", vibe: "Vibrant green", primary: "#143723", secondary: "#19462c", accent: "#50ff8c" },
+        { name: "DeepSea", vibe: "Dark ocean blue", primary: "#081223", secondary: "#0c1c30", accent: "#64b4ff" },
+        { name: "Amethyst", vibe: "Royal purple", primary: "#3c2346", secondary: "#552e66", accent: "#dc96ff" },
+        { name: "Topaz", vibe: "Golden-orange", primary: "#462d19", secondary: "#6b441f", accent: "#ffb450" },
+        { name: "Violet", vibe: "Electric blue-purple", primary: "#231946", secondary: "#322164", accent: "#9678ff" },
+        { name: "Sky", vibe: "Real sky blue", primary: "#6496c8", secondary: "#87b0dc", accent: "#fff5dc" },
+        { name: "Camo", vibe: "Military green", primary: "#2d3723", secondary: "#3b482e", accent: "#8caa64" },
+        { name: "Galaxy", vibe: "Cosmic pink", primary: "#1e0f2d", secondary: "#2f1845", accent: "#ff64b4" },
+        { name: "Rainbow", vibe: "Multicolor", primary: "#1e1e28", secondary: "#28233c", accent: "#ff64a0" },
+        { name: "Wooden", vibe: "Natural oak", primary: "#412d1e", secondary: "#5a3f28", accent: "#c38e5e" },
+        { name: "Dark", vibe: "Classic dark", primary: "#1e1e1e", secondary: "#232323", accent: "#c8c8c8" },
+        { name: "Light", vibe: "Clean light", primary: "#e8e8e8", secondary: "#ffffff", accent: "#323232" },
+        { name: "Void", vibe: "Extra dark", primary: "#0f0f0f", secondary: "#141414", accent: "#c8c8c8" }
+    ];
+
+    // Build theme grid
+    const grid = document.getElementById('themeGrid');
+    
+    themes.forEach(theme => {
+        const card = document.createElement('div');
+        card.className = 'theme-card';
+        card.onclick = () => {
+            // Copy theme name to clipboard for easy use
+            navigator.clipboard.writeText(theme.name);
+            alert(`Theme name "${theme.name}" copied to clipboard!`);
+        };
+        
+        const colorBar = document.createElement('div');
+        colorBar.className = 'theme-color';
+        colorBar.style.background = `linear-gradient(135deg, ${theme.primary}, ${theme.secondary})`;
+        colorBar.style.borderBottom = `3px solid ${theme.accent}`;
+        
+        const name = document.createElement('div');
+        name.className = 'theme-name';
+        name.textContent = theme.name;
+        
+        const vibe = document.createElement('div');
+        vibe.className = 'theme-vibe';
+        vibe.textContent = theme.vibe;
+        
+        card.appendChild(colorBar);
+        card.appendChild(name);
+        card.appendChild(vibe);
+        grid.appendChild(card);
+    });
+</script>
+
+</body>
+  </html>
