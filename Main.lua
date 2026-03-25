@@ -573,6 +573,38 @@ function Library:CreateWindow(Settings)
 		end
 	end
 
+
+local minimizeBtn = Sidebar.Top.Buttons:FindFirstChild("Minimize")
+if not minimizeBtn then
+    minimizeBtn = Instance.new("TextButton")
+    minimizeBtn.Name = "Minimize"
+    minimizeBtn.Text = "_"
+    minimizeBtn.Size = UDim2.new(0, 30, 1, 0)
+    minimizeBtn.Position = UDim2.new(1, -60, 0, 0)
+    minimizeBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    minimizeBtn.BackgroundTransparency = 0
+    minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    minimizeBtn.TextSize = 18
+    minimizeBtn.Parent = Sidebar.Top.Buttons
+    
+    -- Add hover effect
+    minimizeBtn.MouseEnter:Connect(function()
+        minimizeBtn.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
+    end)
+    minimizeBtn.MouseLeave:Connect(function()
+        minimizeBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    end)
+    
+    -- Add minimize functionality
+    minimizeBtn.MouseButton1Click:Connect(function()
+        Opened = false
+        Window.Visible = false
+        if BlurEnabled then
+            Blurs[Settings.Title].root.Parent = nil
+        end
+    end)
+end
+
 	Services.Input.InputBegan:Connect(function(Input, Focused) 
 		if (Input == Setup.Keybind or Input.KeyCode == Setup.Keybind) and not Focused then
 			Close()
