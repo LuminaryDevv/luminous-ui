@@ -41,7 +41,7 @@ Window:AddDropdown({
 		["Diamond"] = "Diamond",
 		["Gold"] = "Gold",
 		["Silver"] = "Silver",
-		['Ruby"] = "Ruby",
+		["Ruby"] = "Ruby",
 		["Emerald"] = "Emerald",
 		["DeepSea"] = "DeepSea",
 		["Amethyst"] = "Amethyst",
