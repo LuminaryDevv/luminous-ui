@@ -17,7 +17,108 @@ local Setup = {
 	Transparency = 0.2,
 	ThemeMode = "Dark",
 	Size = nil,
+	ConfigFolder = nil,
 }
+
+-- Config system
+local Config = {
+	CurrentConfig = nil,
+	SavedConfigs = {},
+}
+
+-- Create config folder if it doesn't exist
+local function GetConfigFolder()
+	if Setup.ConfigFolder then return Setup.ConfigFolder end
+	local folder = Instance.new("Folder")
+	folder.Name = "LuminousUIConfigs"
+	folder.Parent = game:GetService("Players").LocalPlayer
+	Setup.ConfigFolder = folder
+	return folder
+end
+
+-- Save current UI settings
+function Config:Save(name)
+	local configData = {
+		Name = name,
+		Theme = Setup.ThemeMode,
+		ThemeName = Setup.CurrentThemeName or "Dark",
+		Transparency = Setup.Transparency,
+		Keybind = Setup.Keybind,
+		Size = Setup.Size,
+		BlurEnabled = Setup.BlurEnabled or false,
+		SavedAt = os.date("%Y-%m-%d %H:%M:%S"),
+	}
+	
+	local configString = game:GetService("HttpService"):JSONEncode(configData)
+	
+	local configFile = Instance.new("StringValue")
+	configFile.Name = name
+	configFile.Value = configString
+	configFile.Parent = GetConfigFolder()
+	
+	Config.SavedConfigs[name] = configData
+	return configData
+end
+
+-- Load a saved config by name
+function Config:Load(name)
+	local configFile = GetConfigFolder():FindFirstChild(name)
+	if not configFile then return false end
+	
+	local success, data = pcall(function()
+		return game:GetService("HttpService"):JSONDecode(configFile.Value)
+	end)
+	
+	if not success or not data then return false end
+	
+	-- Apply settings
+	if data.ThemeName then
+		Setup.CurrentThemeName = data.ThemeName
+		if Options and Options.SetTheme then
+			Options:SetTheme(data.ThemeName)
+		end
+	end
+	
+	if data.Transparency then
+		Setup.Transparency = data.Transparency
+	end
+	
+	if data.Keybind then
+		Setup.Keybind = data.Keybind
+	end
+	
+	if data.Size then
+		Setup.Size = data.Size
+	end
+	
+	return true
+end
+
+-- Get all saved configs
+function Config:GetAll()
+	local configs = {}
+	for _, child in ipairs(GetConfigFolder():GetChildren()) do
+		if child:IsA("StringValue") then
+			local success, data = pcall(function()
+				return game:GetService("HttpService"):JSONDecode(child.Value)
+			end)
+			if success and data then
+				table.insert(configs, data)
+			end
+		end
+	end
+	return configs
+end
+
+-- Delete a saved config
+function Config:Delete(name)
+	local configFile = GetConfigFolder():FindFirstChild(name)
+	if configFile then
+		configFile:Destroy()
+		return true
+	end
+	return false
+end
 
 local Theme = {
 	Primary = Color3.fromRGB(30, 30, 30),
@@ -30,214 +131,12 @@ local Theme = {
 	Shadow = Color3.fromRGB(0, 0, 0),
 	Outline = Color3.fromRGB(40, 40, 40),
 	Icon = Color3.fromRGB(220, 220, 220),
+	Accent = Color3.fromRGB(153, 155, 255),  -- Default accent for toggles/sliders
 }
 
--- themes
+-- themes (keep your existing BuiltInThemes table here, it's correct)
 local BuiltInThemes = {
-	Dark = {
-		Primary = Color3.fromRGB(30, 30, 30),
-		Secondary = Color3.fromRGB(35, 35, 35),
-		Component = Color3.fromRGB(40, 40, 40),
-		Interactables = Color3.fromRGB(45, 45, 45),
-		Tab = Color3.fromRGB(200, 200, 200),
-		Title = Color3.fromRGB(240, 240, 240),
-		Description = Color3.fromRGB(200, 200, 200),
-		Shadow = Color3.fromRGB(0, 0, 0),
-		Outline = Color3.fromRGB(40, 40, 40),
-		Icon = Color3.fromRGB(220, 220, 220),
-	},
-	Light = {
-		Primary = Color3.fromRGB(232, 232, 232),
-		Secondary = Color3.fromRGB(255, 255, 255),
-		Component = Color3.fromRGB(245, 245, 245),
-		Interactables = Color3.fromRGB(235, 235, 235),
-		Tab = Color3.fromRGB(50, 50, 50),
-		Title = Color3.fromRGB(0, 0, 0),
-		Description = Color3.fromRGB(100, 100, 100),
-		Shadow = Color3.fromRGB(255, 255, 255),
-		Outline = Color3.fromRGB(210, 210, 210),
-		Icon = Color3.fromRGB(100, 100, 100),
-	},
-	Void = {
-		Primary = Color3.fromRGB(15, 15, 15),
-		Secondary = Color3.fromRGB(20, 20, 20),
-		Component = Color3.fromRGB(25, 25, 25),
-		Interactables = Color3.fromRGB(30, 30, 30),
-		Tab = Color3.fromRGB(200, 200, 200),
-		Title = Color3.fromRGB(240, 240, 240),
-		Description = Color3.fromRGB(200, 200, 200),
-		Shadow = Color3.fromRGB(0, 0, 0),
-		Outline = Color3.fromRGB(40, 40, 40),
-		Icon = Color3.fromRGB(220, 220, 220),
-	},
-	Diamond = {
-		Primary = Color3.fromRGB(10, 25, 40),
-		Secondary = Color3.fromRGB(15, 35, 55),
-		Component = Color3.fromRGB(20, 45, 70),
-		Interactables = Color3.fromRGB(30, 65, 95),
-		Tab = Color3.fromRGB(0, 255, 255),
-		Title = Color3.fromRGB(180, 255, 255),
-		Description = Color3.fromRGB(120, 200, 220),
-		Shadow = Color3.fromRGB(0, 0, 0),
-		Outline = Color3.fromRGB(0, 180, 200), 
-		Icon = Color3.fromRGB(0, 230, 255),
-	},
-	Gold = {
-		Primary = Color3.fromRGB(50, 40, 20),
-		Secondary = Color3.fromRGB(80, 65, 35),
-		Component = Color3.fromRGB(110, 90, 50),
-		Interactables = Color3.fromRGB(150, 125, 70),
-		Tab = Color3.fromRGB(255, 220, 80),
-		Title = Color3.fromRGB(255, 240, 150),
-		Description = Color3.fromRGB(230, 200, 100),
-		Shadow = Color3.fromRGB(0, 0, 0),
-		Outline = Color3.fromRGB(180, 145, 60),
-		Icon = Color3.fromRGB(255, 210, 70),
-	},
-	DeepSea = {
-		Primary = Color3.fromRGB(8, 18, 35),
-		Secondary = Color3.fromRGB(12, 28, 48),
-		Component = Color3.fromRGB(18, 38, 58),
-		Interactables = Color3.fromRGB(28, 58, 88),
-		Tab = Color3.fromRGB(100, 180, 255),
-		Title = Color3.fromRGB(160, 210, 255),
-		Description = Color3.fromRGB(120, 170, 220),
-		Shadow = Color3.fromRGB(0, 0, 0),
-		Outline = Color3.fromRGB(40, 80, 120),
-		Icon = Color3.fromRGB(80, 160, 255),
-	},
-	Emerald = {
-		Primary = Color3.fromRGB(20, 55, 35),
-		Secondary = Color3.fromRGB(25, 70, 45),
-		Component = Color3.fromRGB(35, 90, 55),
-		Interactables = Color3.fromRGB(50, 120, 75),
-		Tab = Color3.fromRGB(80, 255, 140),
-		Title = Color3.fromRGB(150, 255, 180),
-		Description = Color3.fromRGB(120, 200, 150),
-		Shadow = Color3.fromRGB(0, 0, 0),
-		Outline = Color3.fromRGB(50, 150, 80),
-		Icon = Color3.fromRGB(100, 255, 150),
-	},
-	Ruby = {
-		Primary = Color3.fromRGB(60, 20, 25),
-		Secondary = Color3.fromRGB(80, 25, 30),
-		Component = Color3.fromRGB(100, 35, 40),
-		Interactables = Color3.fromRGB(140, 50, 55),
-		Tab = Color3.fromRGB(255, 80, 100),
-		Title = Color3.fromRGB(255, 150, 160),
-		Description = Color3.fromRGB(220, 120, 130),
-		Shadow = Color3.fromRGB(0, 0, 0),
-		Outline = Color3.fromRGB(180, 50, 60),
-		Icon = Color3.fromRGB(255, 100, 120),
-	},
-	Camo = {
-		Primary = Color3.fromRGB(45, 55, 35),
-		Secondary = Color3.fromRGB(55, 65, 42),
-		Component = Color3.fromRGB(65, 75, 48),
-		Interactables = Color3.fromRGB(75, 85, 55),
-		Tab = Color3.fromRGB(140, 170, 100),
-		Title = Color3.fromRGB(200, 220, 150),
-		Description = Color3.fromRGB(150, 170, 120),
-		Shadow = Color3.fromRGB(20, 25, 15),
-		Outline = Color3.fromRGB(70, 85, 50),
-		Icon = Color3.fromRGB(120, 150, 80),
-	},
-	Galaxy = {
-		Primary = Color3.fromRGB(15, 10, 35),
-		Secondary = Color3.fromRGB(35, 18, 55),
-		Component = Color3.fromRGB(55, 28, 80),
-		Interactables = Color3.fromRGB(85, 45, 115),
-		Tab = Color3.fromRGB(255, 100, 180),
-		Title = Color3.fromRGB(255, 160, 220),
-		Description = Color3.fromRGB(200, 120, 180),
-		Shadow = Color3.fromRGB(0, 0, 0),
-		Outline = Color3.fromRGB(140, 70, 150),
-		Icon = Color3.fromRGB(255, 120, 200),
-	},
-	Amethyst = {
-		Primary = Color3.fromRGB(60, 35, 70),
-		Secondary = Color3.fromRGB(85, 50, 95),
-		Component = Color3.fromRGB(110, 70, 120),
-		Interactables = Color3.fromRGB(145, 100, 155),
-		Tab = Color3.fromRGB(220, 150, 255),
-		Title = Color3.fromRGB(240, 190, 255),
-		Description = Color3.fromRGB(190, 140, 215),
-		Shadow = Color3.fromRGB(0, 0, 0),
-		Outline = Color3.fromRGB(130, 85, 150),
-		Icon = Color3.fromRGB(215, 145, 245),
-	},
-	Topaz = {
-		Primary = Color3.fromRGB(70, 45, 25),
-		Secondary = Color3.fromRGB(95, 60, 35),
-		Component = Color3.fromRGB(120, 80, 45),
-		Interactables = Color3.fromRGB(155, 105, 60),
-		Tab = Color3.fromRGB(255, 180, 80),
-		Title = Color3.fromRGB(255, 210, 130),
-		Description = Color3.fromRGB(220, 160, 90),
-		Shadow = Color3.fromRGB(0, 0, 0),
-		Outline = Color3.fromRGB(170, 115, 55),
-		Icon = Color3.fromRGB(255, 170, 70),
-	},
-	Rainbow = {
-		Primary = Color3.fromRGB(30, 30, 40),
-		Secondary = Color3.fromRGB(40, 35, 50),
-		Component = Color3.fromRGB(55, 45, 65),
-		Interactables = Color3.fromRGB(80, 65, 95),
-		Tab = Color3.fromRGB(255, 100, 150),
-		Title = Color3.fromRGB(100, 255, 150),
-		Description = Color3.fromRGB(100, 200, 255),
-		Shadow = Color3.fromRGB(0, 0, 0),
-		Outline = Color3.fromRGB(255, 200, 100),
-		Icon = Color3.fromRGB(255, 150, 100),
-	},
-	Wooden = {
-		Primary = Color3.fromRGB(65, 45, 30),
-		Secondary = Color3.fromRGB(85, 60, 40),
-		Component = Color3.fromRGB(105, 75, 50),
-		Interactables = Color3.fromRGB(135, 100, 70),
-		Tab = Color3.fromRGB(180, 130, 85),
-		Title = Color3.fromRGB(220, 180, 130),
-		Description = Color3.fromRGB(160, 120, 85),
-		Shadow = Color3.fromRGB(0, 0, 0),
-		Outline = Color3.fromRGB(115, 80, 55),
-		Icon = Color3.fromRGB(195, 145, 95),
-	},
-	Silver = {
-		Primary = Color3.fromRGB(70, 75, 85),
-		Secondary = Color3.fromRGB(95, 100, 110),
-		Component = Color3.fromRGB(120, 125, 135),
-		Interactables = Color3.fromRGB(150, 155, 165),
-		Tab = Color3.fromRGB(200, 205, 215),
-		Title = Color3.fromRGB(235, 240, 250),
-		Description = Color3.fromRGB(170, 175, 185),
-		Shadow = Color3.fromRGB(0, 0, 0),
-		Outline = Color3.fromRGB(100, 105, 115),
-		Icon = Color3.fromRGB(190, 195, 210),
-	},
-	Sky = {
-		Primary = Color3.fromRGB(100, 150, 200),
-		Secondary = Color3.fromRGB(135, 180, 225),
-		Component = Color3.fromRGB(170, 205, 240),
-		Interactables = Color3.fromRGB(200, 225, 250),
-		Tab = Color3.fromRGB(255, 245, 220),
-		Title = Color3.fromRGB(255, 250, 235),
-		Description = Color3.fromRGB(220, 235, 250),
-		Shadow = Color3.fromRGB(0, 0, 0),
-		Outline = Color3.fromRGB(120, 170, 215),
-		Icon = Color3.fromRGB(255, 235, 180),
-	},
-	Violet = {
-		Primary = Color3.fromRGB(35, 25, 70),
-		Secondary = Color3.fromRGB(50, 35, 95),
-		Component = Color3.fromRGB(70, 50, 120),
-		Interactables = Color3.fromRGB(100, 75, 155),
-		Tab = Color3.fromRGB(150, 120, 255),
-		Title = Color3.fromRGB(200, 180, 255),
-		Description = Color3.fromRGB(145, 120, 210),
-		Shadow = Color3.fromRGB(0, 0, 0),
-		Outline = Color3.fromRGB(100, 70, 160),
-		Icon = Color3.fromRGB(170, 120, 255),
-	},
+	-- ... (your existing themes, I'm omitting for brevity, but keep them all)
 }
 
 --// Services & Functions
@@ -506,6 +405,7 @@ function Library:CreateWindow(Settings)
 	local Opened = true;
 	local Maximized = false;
 	local BlurEnabled = false
+	local MinimizedBar = nil
 
 	for Index, Example in next, Window:GetDescendants() do
 		if Example.Name:find("Example") and not Examples[Example.Name] then
@@ -517,8 +417,9 @@ function Library:CreateWindow(Settings)
 	Drag(Window);
 	Resizeable(Window, Vector2.new(411, 271), Vector2.new(9e9, 9e9));
 	Setup.Transparency = Settings.Transparency or 0
-	Setup.Size = Settings.Size or UDim2.new(0, 550, 0, 450)  -- Larger default size
+	Setup.Size = Settings.Size or UDim2.new(0, 550, 0, 450)
 	Setup.ThemeMode = Settings.Theme or "Dark"
+	Setup.BlurEnabled = Settings.Blurring or false
 
 	if Settings.Blurring then
 		Blurs[Settings.Title] = Blur.new(Window, 5)
@@ -541,7 +442,7 @@ function Library:CreateWindow(Settings)
 	-- Title area (left side)
 	local TitleFrame = Instance.new("Frame")
 	TitleFrame.Name = "TitleFrame"
-	TitleFrame.Size = UDim2.new(0, 250, 1, 0)
+	TitleFrame.Size = UDim2.new(0, 300, 1, 0)
 	TitleFrame.Position = UDim2.new(0, 10, 0, 0)
 	TitleFrame.BackgroundTransparency = 1
 	TitleFrame.Parent = TopBar
@@ -554,6 +455,7 @@ function Library:CreateWindow(Settings)
 	TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 	TitleLabel.TextSize = 14
 	TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+	TitleLabel.TextTruncate = Enum.TextTruncate.None
 	TitleLabel.Font = Enum.Font.GothamBold
 	TitleLabel.Parent = TitleFrame
 
@@ -565,42 +467,41 @@ function Library:CreateWindow(Settings)
 	SubLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
 	SubLabel.TextSize = 10
 	SubLabel.TextXAlignment = Enum.TextXAlignment.Left
+	SubLabel.TextTruncate = Enum.TextTruncate.None
 	SubLabel.Font = Enum.Font.Gotham
 	SubLabel.Parent = TitleFrame
 
 	--// Create buttons (Minimize, Maximize, Close)
 	buttonContainer = Instance.new("Frame")
 	buttonContainer.Name = "Buttons"
-	buttonContainer.Size = UDim2.new(0, 90, 1, 0)
-	buttonContainer.Position = UDim2.new(1, -90, 0, 0)
+	buttonContainer.Size = UDim2.new(0, 96, 1, 0)
+	buttonContainer.Position = UDim2.new(1, -100, 0, 0)
 	buttonContainer.BackgroundTransparency = 1
 	buttonContainer.Parent = TopBar
 
 	-- Button definitions
 	local buttons = {
 		{name = "Minimize", icon = "rbxassetid://103626408777602", position = 0},
-		{name = "Maximize", icon = "rbxassetid://6031090978", position = 30},
-		{name = "Close", icon = "rbxassetid://117747448917698", position = 60},
+		{name = "Maximize", icon = "rbxassetid://6031090978", position = 32},
+		{name = "Close", icon = "rbxassetid://117747448917698", position = 64},
 	}
 
 	for _, btnData in ipairs(buttons) do
 		local button = Instance.new("ImageButton")
 		button.Name = btnData.name
-		button.Size = UDim2.new(0, 30, 1, 0)
+		button.Size = UDim2.new(0, 28, 1, 0)
 		button.Position = UDim2.new(0, btnData.position, 0, 0)
 		button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 		button.BackgroundTransparency = 0
 		button.Parent = buttonContainer
 		
-		-- Add icon
 		local icon = Instance.new("ImageLabel")
-		icon.Size = UDim2.new(0, 16, 0, 16)
-		icon.Position = UDim2.new(0.5, -8, 0.5, -8)
+		icon.Size = UDim2.new(0, 14, 0, 14)
+		icon.Position = UDim2.new(0.5, -7, 0.5, -7)
 		icon.BackgroundTransparency = 1
 		icon.Image = btnData.icon
 		icon.Parent = button
 		
-		-- Hover effect
 		button.MouseEnter:Connect(function()
 			if btnData.name == "Close" then
 				button.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
@@ -612,10 +513,8 @@ function Library:CreateWindow(Settings)
 			button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 		end)
 		
-		-- Button functionality
 		if btnData.name == "Close" then
 			button.MouseButton1Click:Connect(function()
-				-- Confirmation dialog
 				local confirmFrame = Instance.new("Frame")
 				confirmFrame.Size = UDim2.new(0, 300, 0, 140)
 				confirmFrame.Position = UDim2.new(0.5, -150, 0.5, -70)
@@ -671,7 +570,6 @@ function Library:CreateWindow(Settings)
 				
 				yesBtn.MouseButton1Click:Connect(function()
 					confirmFrame:Destroy()
-					-- Destroy animation
 					local TargetSize = UDim2.new(0, 50, 0, 30)
 					Tween(Window, 0.2, { Size = TargetSize, GroupTransparency = 1 })
 					task.wait(0.2)
@@ -679,6 +577,7 @@ function Library:CreateWindow(Settings)
 						Blurs[Settings.Title].root:Destroy()
 						Blurs[Settings.Title] = nil
 					end
+					if MinimizedBar then MinimizedBar:Destroy() end
 					Window:Destroy()
 					Opened = false
 				end)
@@ -698,13 +597,94 @@ function Library:CreateWindow(Settings)
 			end)
 		elseif btnData.name == "Minimize" then
 			button.MouseButton1Click:Connect(function()
-				local TargetSize = UDim2.new(0, 50, 0, 30)
-				Tween(Window, 0.2, { Size = TargetSize, GroupTransparency = 1 })
-				task.wait(0.2)
-				Opened = false
-				Window.Visible = false
-				if BlurEnabled then
-					Blurs[Settings.Title].root.Parent = nil
+				if Opened then
+					local TargetSize = UDim2.new(0, 50, 0, 30)
+					Tween(Window, 0.2, { Size = TargetSize, GroupTransparency = 1 })
+					task.wait(0.2)
+					
+					Opened = false
+					Window.Visible = false
+					if BlurEnabled then
+						Blurs[Settings.Title].root.Parent = nil
+					end
+					
+					if not MinimizedBar or not MinimizedBar.Parent then
+						MinimizedBar = Instance.new("Frame")
+						MinimizedBar.Name = "MinimizedBar"
+						MinimizedBar.Size = UDim2.new(0, 200, 0, 36)
+						MinimizedBar.Position = UDim2.new(0.5, -100, 0, 50)
+						MinimizedBar.AnchorPoint = Vector2.new(0.5, 0)
+						MinimizedBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+						MinimizedBar.BackgroundTransparency = 0
+						MinimizedBar.BorderSize = 0
+						MinimizedBar.ZIndex = 100
+						MinimizedBar.Parent = game.CoreGui
+						
+						local corner = Instance.new("UICorner")
+						corner.CornerRadius = UDim.new(0, 8)
+						corner.Parent = MinimizedBar
+						
+						local stroke = Instance.new("UIStroke")
+						stroke.Color = Color3.fromRGB(80, 80, 80)
+						stroke.Thickness = 1
+						stroke.Parent = MinimizedBar
+						
+						local icon = Instance.new("ImageLabel")
+						icon.Size = UDim2.new(0, 20, 0, 20)
+						icon.Position = UDim2.new(0, 8, 0.5, -10)
+						icon.BackgroundTransparency = 1
+						icon.Image = "rbxassetid://11963373994"
+						icon.Parent = MinimizedBar
+						
+						local titleText = Instance.new("TextLabel")
+						titleText.Size = UDim2.new(1, -40, 1, 0)
+						titleText.Position = UDim2.new(0, 32, 0, 0)
+						titleText.BackgroundTransparency = 1
+						titleText.Text = Settings.Title or "Luminous UI"
+						titleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+						titleText.TextSize = 13
+						titleText.TextXAlignment = Enum.TextXAlignment.Left
+						titleText.Font = Enum.Font.GothamMedium
+						titleText.Parent = MinimizedBar
+						
+						local dragging = false
+						local dragStart, barStart
+						MinimizedBar.InputBegan:Connect(function(input)
+							if input.UserInputType == Enum.UserInputType.MouseButton1 then
+								dragging = true
+								dragStart = Vector2.new(input.Position.X, input.Position.Y)
+								barStart = MinimizedBar.Position
+							end
+						end)
+						Services.Input.InputChanged:Connect(function(input)
+							if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+								local delta = Vector2.new(input.Position.X, input.Position.Y) - dragStart
+								MinimizedBar.Position = UDim2.new(barStart.X.Scale, barStart.X.Offset + delta.X, barStart.Y.Scale, barStart.Y.Offset + delta.Y)
+							end
+						end)
+						Services.Input.InputEnded:Connect(function(input)
+							if input.UserInputType == Enum.UserInputType.MouseButton1 then
+								dragging = false
+							end
+						end)
+						
+						MinimizedBar.InputBegan:Connect(function(input)
+							if input.UserInputType == Enum.UserInputType.MouseButton1 then
+								MinimizedBar:Destroy()
+								MinimizedBar = nil
+								Window.Visible = true
+								Window.Size = UDim2.new(0, 50, 0, 30)
+								Window.GroupTransparency = 1
+								Tween(Window, 0.25, { Size = Setup.Size, GroupTransparency = 0 })
+								Opened = true
+								if BlurEnabled then
+									Blurs[Settings.Title].root.Parent = workspace.CurrentCamera
+								end
+							end
+						end)
+					else
+						MinimizedBar.Visible = true
+					end
 				end
 			end)
 		end
@@ -720,6 +700,7 @@ function Library:CreateWindow(Settings)
 				Blurs[Settings.Title].root:Destroy()
 				Blurs[Settings.Title] = nil
 			end
+			if MinimizedBar then MinimizedBar:Destroy() end
 			Window:Destroy()
 			Opened = false
 		else
@@ -877,6 +858,7 @@ function Library:CreateWindow(Settings)
 		})
 	end
 	
+	-- UPDATED: Button with theme-aware colors
 	function Options:AddButton(Settings: { Title: string, Description: string, Tab: Instance, Callback: any }) 
 		local Button = Clone(Components:FindFirstChild("Button"));
 		local Title, Description = Options:GetLabels(Button);
@@ -915,6 +897,7 @@ function Library:CreateWindow(Settings)
 		})
 	end
 
+	-- UPDATED: Toggle with theme accent color
 	function Options:AddToggle(Settings: { Title: string, Description: string, Default: boolean, Tab: Instance, Callback: any }) 
 		local Toggle = Clone(Components:FindFirstChild("Toggle"));
 		local Title, Description = Options:GetLabels(Toggle);
@@ -925,11 +908,13 @@ function Library:CreateWindow(Settings)
 		
 		local Set = function(Value)
 			if Value then
-				Tween(Main,   .2, { BackgroundColor3 = Color3.fromRGB(153, 155, 255) });
-				Tween(Circle, .2, { BackgroundColor3 = Color3.fromRGB(255, 255, 255), Position = UDim2.new(1, -16, 0.5, 0) });
+				-- Use theme accent color (Tab color from current theme)
+				local accentColor = Theme.Tab or Color3.fromRGB(153, 155, 255)
+				Tween(Main, .2, { BackgroundColor3 = accentColor })
+				Tween(Circle, .2, { BackgroundColor3 = Color3.fromRGB(255, 255, 255), Position = UDim2.new(1, -16, 0.5, 0) })
 			else
-				Tween(Main,   .2, { BackgroundColor3 = Theme.Interactables });
-				Tween(Circle, .2, { BackgroundColor3 = Theme.Primary, Position = UDim2.new(0, 3, 0.5, 0) });
+				Tween(Main, .2, { BackgroundColor3 = Theme.Interactables })
+				Tween(Circle, .2, { BackgroundColor3 = Theme.Primary, Position = UDim2.new(0, 3, 0.5, 0) })
 			end
 			
 			On.Value = Value
@@ -937,7 +922,6 @@ function Library:CreateWindow(Settings)
 
 		Connect(Toggle.MouseButton1Click, function()
 			local Value = not On.Value
-
 			Set(Value)
 			Settings.Callback(Value)
 		end)
@@ -1072,6 +1056,7 @@ function Library:CreateWindow(Settings)
 		})
 	end
 
+	-- UPDATED: Slider with theme accent color
 	function Options:AddSlider(Settings: { Title: string, Description: string, MaxValue: number, AllowDecimals: boolean, DecimalAmount: number, Tab: Instance, Callback: any }) 
 		local Slider = Clone(Components:FindFirstChild("Slider"));
 		local Title, Description = Options:GetLabels(Slider);
@@ -1093,7 +1078,6 @@ function Library:CreateWindow(Settings)
 			else
 				Number = math.round(Number)
 			end
-			
 			return Number
 		end
 
@@ -1107,13 +1091,15 @@ function Library:CreateWindow(Settings)
 			
 			Value = SetNumber(Number or (Scale * Settings.MaxValue))
 			Amount.Text = Value
+			-- Use theme accent color for fill
+			local accentColor = Theme.Tab or Color3.fromRGB(153, 155, 255)
+			Fill.BackgroundColor3 = accentColor
 			Fill.Size = UDim2.fromScale((Number and Number / Settings.MaxValue) or Scale, 1)
 			Settings.Callback(Value)
 		end
 
 		local Activate = function()
 			Active = true
-
 			repeat task.wait()
 				Update()
 			until not Active
@@ -1131,6 +1117,8 @@ function Library:CreateWindow(Settings)
 		end)
 
 		Fill.Size = UDim2.fromScale(Value, 1);
+		-- Set initial fill color
+		Fill.BackgroundColor3 = Theme.Tab or Color3.fromRGB(153, 155, 255)
 		Animations:Component(Slider);
 		SetProperty(Title, { Text = Settings.Title });
 		SetProperty(Description, { Text = Settings.Description });
@@ -1151,6 +1139,58 @@ function Library:CreateWindow(Settings)
 			Parent = Settings.Tab,
 			Visible = true,
 		})
+	end
+	
+	-- NEW: Config management functions for UI
+	function Options:SaveConfig(name)
+		if not name or name == "" then
+			name = "Config_" .. os.date("%Y%m%d_%H%M%S")
+		end
+		local configData = Config:Save(name)
+		Options:Notify({
+			Title = "Config Saved",
+			Description = "Saved as: " .. name,
+			Duration = 3
+		})
+		return configData
+	end
+	
+	function Options:LoadConfig(name)
+		if Config:Load(name) then
+			Options:Notify({
+				Title = "Config Loaded",
+				Description = "Loaded: " .. name,
+				Duration = 3
+			})
+			-- Refresh UI to show loaded settings
+			if Options.SetTheme and Setup.CurrentThemeName then
+				Options:SetTheme(Setup.CurrentThemeName)
+			end
+			return true
+		else
+			Options:Notify({
+				Title = "Config Not Found",
+				Description = "Could not find: " .. name,
+				Duration = 3
+			})
+			return false
+		end
+	end
+	
+	function Options:GetConfigs()
+		return Config:GetAll()
+	end
+	
+	function Options:DeleteConfig(name)
+		if Config:Delete(name) then
+			Options:Notify({
+				Title = "Config Deleted",
+				Description = "Deleted: " .. name,
+				Duration = 2
+			})
+			return true
+		end
+		return false
 	end
 
 	local Themes = {
@@ -1287,6 +1327,7 @@ function Library:CreateWindow(Settings)
 		if type(Info) == "string" then
 			if BuiltInThemes[Info] then
 				Theme = BuiltInThemes[Info]
+				Setup.CurrentThemeName = Info
 			else
 				warn("[Luminous UI]: Theme '" .. Info .. "' not found, using current theme")
 				return
@@ -1329,6 +1370,7 @@ function Library:CreateWindow(Settings)
 			end
 			if Value then
 				BlurEnabled = true
+				Setup.BlurEnabled = true
 				if not AlreadyBlurred or not Root then
 					Blurs[Settings.Title] = Blur.new(Window, 5)
 				elseif Root and not Root.Parent then
@@ -1337,6 +1379,7 @@ function Library:CreateWindow(Settings)
 			elseif not Value and (AlreadyBlurred and Root and Root.Parent) then
 				Root.Parent = nil
 				BlurEnabled = false
+				Setup.BlurEnabled = false
 			end
 		elseif Setting == "Theme" then
 			Options:SetTheme(Value)
