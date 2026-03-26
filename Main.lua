@@ -632,7 +632,7 @@ function Library:CreateWindow(Settings)
 		Setup.Keybind = Settings.MinimizeKeybind
 	end
 
-	--// Add Title/Watermark to Top Bar (WindUI Style)
+	-- topbar setup
 	local TopBar = Sidebar.Top
 	
 	-- Clear existing children
@@ -642,7 +642,7 @@ function Library:CreateWindow(Settings)
 		end
 	end
 	
-	-- Title area (left side) - WindUI style
+	-- Title area
 	local TitleFrame = Instance.new("Frame")
 	TitleFrame.Name = "TitleFrame"
 	TitleFrame.Size = UDim2.new(0, 300, 1, 0)
@@ -661,7 +661,7 @@ function Library:CreateWindow(Settings)
 	TitleLabel.Font = Enum.Font.GothamMedium
 	TitleLabel.Parent = TitleFrame
 
-	-- Subtitle/Watermark (like WindUI)
+	-- Subtitle/Watermark
 	local SubLabel = Instance.new("TextLabel")
 	SubLabel.Size = UDim2.new(1, 0, 1, 0)
 	SubLabel.Position = UDim2.new(0, 0, 0, 18)
@@ -674,7 +674,7 @@ function Library:CreateWindow(Settings)
 	SubLabel.Font = Enum.Font.Gotham
 	SubLabel.Parent = TitleFrame
 
-	--// Create buttons (Minimize, Maximize, Close) - WindUI style
+	-- topbar buttons
 	local buttonContainer = Instance.new("Frame")
 	buttonContainer.Name = "Buttons"
 	buttonContainer.Size = UDim2.new(0, 90, 1, 0)
@@ -682,7 +682,7 @@ function Library:CreateWindow(Settings)
 	buttonContainer.BackgroundTransparency = 1
 	buttonContainer.Parent = TopBar
 
-	-- Button definitions with proper icons
+	-- Button definitions
 	local buttons = {
 		{name = "Minimize", icon = "rbxassetid://103626408777602", position = 0},
 		{name = "Maximize", icon = "rbxassetid://6031090978", position = 30},
@@ -706,7 +706,7 @@ function Library:CreateWindow(Settings)
 		icon.Image = btnData.icon
 		icon.Parent = button
 		
-		-- Hover effect
+		-- Hover
 		button.MouseEnter:Connect(function()
 			if btnData.name == "Close" then
 				button.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
@@ -759,7 +759,7 @@ function Library:CreateWindow(Settings)
 				yesBtn.Position = UDim2.new(0.25, -55, 1, -42)
 				yesBtn.AnchorPoint = Vector2.new(0.5, 0)
 				yesBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-				yesBtn.Text = "Yes, Close"
+				yesBtn.Text = "Close"
 				yesBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 				yesBtn.TextSize = 13
 				yesBtn.Parent = confirmFrame
@@ -769,7 +769,7 @@ function Library:CreateWindow(Settings)
 				noBtn.Position = UDim2.new(0.75, 55, 1, -42)
 				noBtn.AnchorPoint = Vector2.new(0.5, 0)
 				noBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-				noBtn.Text = "No, Cancel"
+				noBtn.Text = "Cancel"
 				noBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 				noBtn.TextSize = 13
 				noBtn.Parent = confirmFrame
