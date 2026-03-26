@@ -32,6 +32,7 @@ local Theme = {
 	Icon = Color3.fromRGB(220, 220, 220),
 }
 
+-- Built-In Themes (Keep your existing themes here, they are correct)
 local BuiltInThemes = {
 	Dark = {
 		Primary = Color3.fromRGB(30, 30, 30),
@@ -82,17 +83,17 @@ local BuiltInThemes = {
 		Icon = Color3.fromRGB(0, 230, 255),
 	},
 	Gold = {
-    Primary = Color3.fromRGB(50, 40, 20),
-    Secondary = Color3.fromRGB(80, 65, 35),
-    Component = Color3.fromRGB(110, 90, 50),
-    Interactables = Color3.fromRGB(150, 125, 70),
-    Tab = Color3.fromRGB(255, 220, 80),
-    Title = Color3.fromRGB(255, 240, 150),
-    Description = Color3.fromRGB(230, 200, 100),
-    Shadow = Color3.fromRGB(0, 0, 0),
-    Outline = Color3.fromRGB(180, 145, 60),
-    Icon = Color3.fromRGB(255, 210, 70),
-},
+		Primary = Color3.fromRGB(50, 40, 20),
+		Secondary = Color3.fromRGB(80, 65, 35),
+		Component = Color3.fromRGB(110, 90, 50),
+		Interactables = Color3.fromRGB(150, 125, 70),
+		Tab = Color3.fromRGB(255, 220, 80),
+		Title = Color3.fromRGB(255, 240, 150),
+		Description = Color3.fromRGB(230, 200, 100),
+		Shadow = Color3.fromRGB(0, 0, 0),
+		Outline = Color3.fromRGB(180, 145, 60),
+		Icon = Color3.fromRGB(255, 210, 70),
+	},
 	DeepSea = {
 		Primary = Color3.fromRGB(8, 18, 35),
 		Secondary = Color3.fromRGB(12, 28, 48),
@@ -142,29 +143,29 @@ local BuiltInThemes = {
 		Icon = Color3.fromRGB(120, 150, 80),
 	},
 	Galaxy = {
-    Primary = Color3.fromRGB(15, 10, 35),
-    Secondary = Color3.fromRGB(35, 18, 55),
-    Component = Color3.fromRGB(55, 28, 80),
-    Interactables = Color3.fromRGB(85, 45, 115),
-    Tab = Color3.fromRGB(255, 100, 180),
-    Title = Color3.fromRGB(255, 160, 220),
-    Description = Color3.fromRGB(200, 120, 180),
-    Shadow = Color3.fromRGB(0, 0, 0),
-    Outline = Color3.fromRGB(140, 70, 150),
-    Icon = Color3.fromRGB(255, 120, 200),
-    },
+		Primary = Color3.fromRGB(15, 10, 35),
+		Secondary = Color3.fromRGB(35, 18, 55),
+		Component = Color3.fromRGB(55, 28, 80),
+		Interactables = Color3.fromRGB(85, 45, 115),
+		Tab = Color3.fromRGB(255, 100, 180),
+		Title = Color3.fromRGB(255, 160, 220),
+		Description = Color3.fromRGB(200, 120, 180),
+		Shadow = Color3.fromRGB(0, 0, 0),
+		Outline = Color3.fromRGB(140, 70, 150),
+		Icon = Color3.fromRGB(255, 120, 200),
+	},
 	Amethyst = {
-    Primary = Color3.fromRGB(60, 35, 70),
-    Secondary = Color3.fromRGB(85, 50, 95),
-    Component = Color3.fromRGB(110, 70, 120),
-    Interactables = Color3.fromRGB(145, 100, 155),
-    Tab = Color3.fromRGB(220, 150, 255),
-    Title = Color3.fromRGB(240, 190, 255),
-    Description = Color3.fromRGB(190, 140, 215),
-    Shadow = Color3.fromRGB(0, 0, 0),
-    Outline = Color3.fromRGB(130, 85, 150),
-    Icon = Color3.fromRGB(215, 145, 245),
-},
+		Primary = Color3.fromRGB(60, 35, 70),
+		Secondary = Color3.fromRGB(85, 50, 95),
+		Component = Color3.fromRGB(110, 70, 120),
+		Interactables = Color3.fromRGB(145, 100, 155),
+		Tab = Color3.fromRGB(220, 150, 255),
+		Title = Color3.fromRGB(240, 190, 255),
+		Description = Color3.fromRGB(190, 140, 215),
+		Shadow = Color3.fromRGB(0, 0, 0),
+		Outline = Color3.fromRGB(130, 85, 150),
+		Icon = Color3.fromRGB(215, 145, 245),
+	},
 	Topaz = {
 		Primary = Color3.fromRGB(70, 45, 25),
 		Secondary = Color3.fromRGB(95, 60, 35),
@@ -226,18 +227,18 @@ local BuiltInThemes = {
 		Icon = Color3.fromRGB(255, 235, 180),
 	},
 	Violet = {
-	Primary = Color3.fromRGB(35, 25, 70),
-	Secondary = Color3.fromRGB(50, 35, 95),
-	Component = Color3.fromRGB(70, 50, 120),
-	Interactables = Color3.fromRGB(100, 75, 155),
-	Tab = Color3.fromRGB(150, 120, 255),
-	Title = Color3.fromRGB(200, 180, 255),
-	Description = Color3.fromRGB(145, 120, 210),
-	Shadow = Color3.fromRGB(0, 0, 0),
-	Outline = Color3.fromRGB(100, 70, 160),
-	Icon = Color3.fromRGB(170, 120, 255),
-},
-
+		Primary = Color3.fromRGB(35, 25, 70),
+		Secondary = Color3.fromRGB(50, 35, 95),
+		Component = Color3.fromRGB(70, 50, 120),
+		Interactables = Color3.fromRGB(100, 75, 155),
+		Tab = Color3.fromRGB(150, 120, 255),
+		Title = Color3.fromRGB(200, 180, 255),
+		Description = Color3.fromRGB(145, 120, 210),
+		Shadow = Color3.fromRGB(0, 0, 0),
+		Outline = Color3.fromRGB(100, 70, 160),
+		Icon = Color3.fromRGB(170, 120, 255),
+	},
+}
 
 --// Services & Functions
 local Type, Blur = nil
@@ -516,7 +517,7 @@ function Library:CreateWindow(Settings)
 	Drag(Window);
 	Resizeable(Window, Vector2.new(411, 271), Vector2.new(9e9, 9e9));
 	Setup.Transparency = Settings.Transparency or 0
-	Setup.Size = Settings.Size or UDim2.new(0, 570, 0, 370)
+	Setup.Size = Settings.Size or UDim2.new(0, 550, 0, 450)  -- Larger default size
 	Setup.ThemeMode = Settings.Theme or "Dark"
 
 	if Settings.Blurring then
@@ -528,90 +529,219 @@ function Library:CreateWindow(Settings)
 		Setup.Keybind = Settings.MinimizeKeybind
 	end
 
-	--// Animate
-	local Close = function()
-		if Opened then
-			if BlurEnabled then
-				Blurs[Settings.Title].root.Parent = nil
-			end
-
-			Opened = false
-			Animations:Close(Window)
-			Window.Visible = false
-		else
-			Animations:Open(Window, Setup.Transparency)
-			Opened = true
-
-			if BlurEnabled then
-				Blurs[Settings.Title].root.Parent = workspace.CurrentCamera
-			end
-		end
+	--// Add Title/Watermark to Top Bar
+	local TopBar = Sidebar.Top
+	
+	-- Clear existing buttons container if exists
+	local buttonContainer = TopBar:FindFirstChild("Buttons")
+	if buttonContainer then
+		buttonContainer:Destroy()
 	end
+	
+	-- Title area (left side)
+	local TitleFrame = Instance.new("Frame")
+	TitleFrame.Name = "TitleFrame"
+	TitleFrame.Size = UDim2.new(0, 250, 1, 0)
+	TitleFrame.Position = UDim2.new(0, 10, 0, 0)
+	TitleFrame.BackgroundTransparency = 1
+	TitleFrame.Parent = TopBar
 
-	for Index, Button in next, Sidebar.Top.Buttons:GetChildren() do
-		if Button:IsA("TextButton") then
-			local Name = Button.Name
-			Animations:Component(Button, true)
+	local TitleLabel = Instance.new("TextLabel")
+	TitleLabel.Size = UDim2.new(1, 0, 0.6, 0)
+	TitleLabel.Position = UDim2.new(0, 0, 0, 2)
+	TitleLabel.BackgroundTransparency = 1
+	TitleLabel.Text = Settings.Title or "Luminous UI"
+	TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	TitleLabel.TextSize = 14
+	TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+	TitleLabel.Font = Enum.Font.GothamBold
+	TitleLabel.Parent = TitleFrame
 
-			Connect(Button.MouseButton1Click, function() 
-				if Name == "Close" then
-					Close()
-				elseif Name == "Maximize" then
-					if Maximized then
-						Maximized = false
-						Tween(Window, .15, { Size = Setup.Size });
-					else
-						Maximized = true
-						Tween(Window, .15, { Size = UDim2.fromScale(1, 1), Position = UDim2.fromScale(0.5, 0.5 )});
+	local SubLabel = Instance.new("TextLabel")
+	SubLabel.Size = UDim2.new(1, 0, 0.4, 0)
+	SubLabel.Position = UDim2.new(0, 0, 0.6, 0)
+	SubLabel.BackgroundTransparency = 1
+	SubLabel.Text = "by LuminaryDevv"
+	SubLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+	SubLabel.TextSize = 10
+	SubLabel.TextXAlignment = Enum.TextXAlignment.Left
+	SubLabel.Font = Enum.Font.Gotham
+	SubLabel.Parent = TitleFrame
+
+	--// Create buttons (Minimize, Maximize, Close)
+	buttonContainer = Instance.new("Frame")
+	buttonContainer.Name = "Buttons"
+	buttonContainer.Size = UDim2.new(0, 90, 1, 0)
+	buttonContainer.Position = UDim2.new(1, -90, 0, 0)
+	buttonContainer.BackgroundTransparency = 1
+	buttonContainer.Parent = TopBar
+
+	-- Button definitions
+	local buttons = {
+		{name = "Minimize", icon = "rbxassetid://103626408777602", position = 0},
+		{name = "Maximize", icon = "rbxassetid://6031090978", position = 30},
+		{name = "Close", icon = "rbxassetid://117747448917698", position = 60},
+	}
+
+	for _, btnData in ipairs(buttons) do
+		local button = Instance.new("ImageButton")
+		button.Name = btnData.name
+		button.Size = UDim2.new(0, 30, 1, 0)
+		button.Position = UDim2.new(0, btnData.position, 0, 0)
+		button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+		button.BackgroundTransparency = 0
+		button.Parent = buttonContainer
+		
+		-- Add icon
+		local icon = Instance.new("ImageLabel")
+		icon.Size = UDim2.new(0, 16, 0, 16)
+		icon.Position = UDim2.new(0.5, -8, 0.5, -8)
+		icon.BackgroundTransparency = 1
+		icon.Image = btnData.icon
+		icon.Parent = button
+		
+		-- Hover effect
+		button.MouseEnter:Connect(function()
+			if btnData.name == "Close" then
+				button.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
+			else
+				button.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
+			end
+		end)
+		button.MouseLeave:Connect(function()
+			button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+		end)
+		
+		-- Button functionality
+		if btnData.name == "Close" then
+			button.MouseButton1Click:Connect(function()
+				-- Confirmation dialog
+				local confirmFrame = Instance.new("Frame")
+				confirmFrame.Size = UDim2.new(0, 300, 0, 140)
+				confirmFrame.Position = UDim2.new(0.5, -150, 0.5, -70)
+				confirmFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+				confirmFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+				confirmFrame.BorderSize = 0
+				confirmFrame.Parent = Window
+				
+				local uiStroke = Instance.new("UIStroke")
+				uiStroke.Color = Color3.fromRGB(80, 80, 80)
+				uiStroke.Thickness = 1
+				uiStroke.Parent = confirmFrame
+				
+				local title = Instance.new("TextLabel")
+				title.Size = UDim2.new(1, 0, 0, 35)
+				title.Position = UDim2.new(0, 0, 0, 10)
+				title.BackgroundTransparency = 1
+				title.Text = "⚠️ Close Confirmation"
+				title.TextColor3 = Color3.fromRGB(255, 255, 255)
+				title.TextSize = 16
+				title.Font = Enum.Font.GothamBold
+				title.Parent = confirmFrame
+				
+				local message = Instance.new("TextLabel")
+				message.Size = UDim2.new(1, 0, 0, 40)
+				message.Position = UDim2.new(0, 0, 0, 45)
+				message.BackgroundTransparency = 1
+				message.Text = "Are you sure you want to close?\nThis cannot be undone."
+				message.TextColor3 = Color3.fromRGB(200, 200, 200)
+				message.TextSize = 13
+				message.TextWrapped = true
+				message.Parent = confirmFrame
+				
+				local yesBtn = Instance.new("TextButton")
+				yesBtn.Size = UDim2.new(0, 100, 0, 32)
+				yesBtn.Position = UDim2.new(0.25, -55, 1, -42)
+				yesBtn.AnchorPoint = Vector2.new(0.5, 0)
+				yesBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+				yesBtn.Text = "Yes, Close"
+				yesBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+				yesBtn.TextSize = 13
+				yesBtn.Parent = confirmFrame
+				
+				local noBtn = Instance.new("TextButton")
+				noBtn.Size = UDim2.new(0, 100, 0, 32)
+				noBtn.Position = UDim2.new(0.75, 55, 1, -42)
+				noBtn.AnchorPoint = Vector2.new(0.5, 0)
+				noBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+				noBtn.Text = "No, Cancel"
+				noBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+				noBtn.TextSize = 13
+				noBtn.Parent = confirmFrame
+				
+				yesBtn.MouseButton1Click:Connect(function()
+					confirmFrame:Destroy()
+					-- Destroy animation
+					local TargetSize = UDim2.new(0, 50, 0, 30)
+					Tween(Window, 0.2, { Size = TargetSize, GroupTransparency = 1 })
+					task.wait(0.2)
+					if BlurEnabled then
+						Blurs[Settings.Title].root:Destroy()
+						Blurs[Settings.Title] = nil
 					end
-				elseif Name == "Minimize" then
+					Window:Destroy()
 					Opened = false
-					Window.Visible = false
+				end)
+				noBtn.MouseButton1Click:Connect(function()
+					confirmFrame:Destroy()
+				end)
+			end)
+		elseif btnData.name == "Maximize" then
+			button.MouseButton1Click:Connect(function()
+				if Maximized then
+					Maximized = false
+					Tween(Window, .15, { Size = Setup.Size, Position = UDim2.new(0.5, -Setup.Size.X.Offset/2, 0.5, -Setup.Size.Y.Offset/2) })
+				else
+					Maximized = true
+					Tween(Window, .15, { Size = UDim2.fromScale(1, 1), Position = UDim2.fromScale(0.5, 0.5) })
+				end
+			end)
+		elseif btnData.name == "Minimize" then
+			button.MouseButton1Click:Connect(function()
+				local TargetSize = UDim2.new(0, 50, 0, 30)
+				Tween(Window, 0.2, { Size = TargetSize, GroupTransparency = 1 })
+				task.wait(0.2)
+				Opened = false
+				Window.Visible = false
+				if BlurEnabled then
 					Blurs[Settings.Title].root.Parent = nil
 				end
 			end)
 		end
 	end
 
+	--// Animate (Close/Restore function for keybind)
+	local Close = function()
+		if Opened then
+			local TargetSize = UDim2.new(0, 50, 0, 30)
+			Tween(Window, 0.2, { Size = TargetSize, GroupTransparency = 1 })
+			task.wait(0.2)
+			if BlurEnabled then
+				Blurs[Settings.Title].root:Destroy()
+				Blurs[Settings.Title] = nil
+			end
+			Window:Destroy()
+			Opened = false
+		else
+			Window.Size = UDim2.new(0, 50, 0, 30)
+			Window.GroupTransparency = 1
+			Window.Visible = true
+			Tween(Window, 0.25, { Size = Setup.Size, GroupTransparency = 0 })
+			Opened = true
+			if BlurEnabled then
+				Blurs[Settings.Title].root.Parent = workspace.CurrentCamera
+			end
+		end
+	end
 
-local minimizeBtn = Sidebar.Top.Buttons:FindFirstChild("Minimize")
-if not minimizeBtn then
-    minimizeBtn = Instance.new("TextButton")
-    minimizeBtn.Name = "Minimize"
-    minimizeBtn.Text = "_"
-    minimizeBtn.Size = UDim2.new(0, 30, 1, 0)
-    minimizeBtn.Position = UDim2.new(1, -60, 0, 0)
-    minimizeBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-    minimizeBtn.BackgroundTransparency = 0
-    minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    minimizeBtn.TextSize = 18
-    minimizeBtn.Parent = Sidebar.Top.Buttons
-    
-    -- Add hover effect
-    minimizeBtn.MouseEnter:Connect(function()
-        minimizeBtn.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
-    end)
-    minimizeBtn.MouseLeave:Connect(function()
-        minimizeBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-    end)
-    
-    -- Add minimize functionality
-    minimizeBtn.MouseButton1Click:Connect(function()
-        Opened = false
-        Window.Visible = false
-        if BlurEnabled then
-            Blurs[Settings.Title].root.Parent = nil
-        end
-    end)
-end
-
+	-- Keybind to close/restore
 	Services.Input.InputBegan:Connect(function(Input, Focused) 
 		if (Input == Setup.Keybind or Input.KeyCode == Setup.Keybind) and not Focused then
 			Close()
 		end
 	end)
 
-	--SetTab
+	--// Tab Functions
 	function Options:SetTab(Name: string)
 		for Index, Button in next, Tab:GetChildren() do
 			if Button:IsA("TextButton") then
