@@ -32,7 +32,7 @@ local Theme = {
 	Icon = Color3.fromRGB(220, 220, 220),
 }
 
--- Built-In Themes (Keep your existing themes here, they are correct)
+-- themes
 local BuiltInThemes = {
 	Dark = {
 		Primary = Color3.fromRGB(30, 30, 30),
