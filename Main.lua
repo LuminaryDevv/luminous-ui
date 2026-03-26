@@ -1,4 +1,4 @@
--- Luminous-ui By LuminaryDevv, BaconHaxxer1, AppleIosUsery
+-- Luminous-ui By LuminaryDevv
 -- ANY MODIFICATION OR REUSE OF ASSETS IS STRICTLY PROHIBITED.
 local GetService = game.GetService
 local Connect = game.Loaded.Connect
@@ -26,7 +26,7 @@ local Config = {
 	SavedConfigs = {},
 }
 
--- Create config folder if it doesn't exist
+-- Create config folder
 local function GetConfigFolder()
 	if Setup.ConfigFolder then return Setup.ConfigFolder end
 	local folder = Instance.new("Folder")
@@ -94,7 +94,7 @@ function Config:Load(name)
 	return true
 end
 
--- Get all saved configs
+-- Get config
 function Config:GetAll()
 	local configs = {}
 	for _, child in ipairs(GetConfigFolder():GetChildren()) do
@@ -110,7 +110,7 @@ function Config:GetAll()
 	return configs
 end
 
--- Delete a saved config
+-- Delete config
 function Config:Delete(name)
 	local configFile = GetConfigFolder():FindFirstChild(name)
 	if configFile then
@@ -632,16 +632,17 @@ function Library:CreateWindow(Settings)
 		Setup.Keybind = Settings.MinimizeKeybind
 	end
 
-	--// Add Title/Watermark to Top Bar
+	--// Add Title/Watermark to Top Bar (WindUI Style)
 	local TopBar = Sidebar.Top
 	
-	-- Clear existing buttons container if exists
-	local buttonContainer = TopBar:FindFirstChild("Buttons")
-	if buttonContainer then
-		buttonContainer:Destroy()
+	-- Clear existing children
+	for _, child in ipairs(TopBar:GetChildren()) do
+		if child:IsA("Frame") or child:IsA("TextLabel") then
+			child:Destroy()
+		end
 	end
 	
-	-- Title area (left side)
+	-- Title area (left side) - WindUI style
 	local TitleFrame = Instance.new("Frame")
 	TitleFrame.Name = "TitleFrame"
 	TitleFrame.Size = UDim2.new(0, 300, 1, 0)
@@ -650,20 +651,20 @@ function Library:CreateWindow(Settings)
 	TitleFrame.Parent = TopBar
 
 	local TitleLabel = Instance.new("TextLabel")
-	TitleLabel.Size = UDim2.new(1, 0, 0.6, 0)
-	TitleLabel.Position = UDim2.new(0, 0, 0, 2)
+	TitleLabel.Size = UDim2.new(1, 0, 1, 0)
 	TitleLabel.BackgroundTransparency = 1
 	TitleLabel.Text = Settings.Title or "Luminous UI"
 	TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 	TitleLabel.TextSize = 14
 	TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 	TitleLabel.TextTruncate = Enum.TextTruncate.None
-	TitleLabel.Font = Enum.Font.GothamBold
+	TitleLabel.Font = Enum.Font.GothamMedium
 	TitleLabel.Parent = TitleFrame
 
+	-- Subtitle/Watermark (like WindUI)
 	local SubLabel = Instance.new("TextLabel")
-	SubLabel.Size = UDim2.new(1, 0, 0.4, 0)
-	SubLabel.Position = UDim2.new(0, 0, 0.6, 0)
+	SubLabel.Size = UDim2.new(1, 0, 1, 0)
+	SubLabel.Position = UDim2.new(0, 0, 0, 18)
 	SubLabel.BackgroundTransparency = 1
 	SubLabel.Text = "by LuminaryDevv"
 	SubLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
@@ -673,19 +674,19 @@ function Library:CreateWindow(Settings)
 	SubLabel.Font = Enum.Font.Gotham
 	SubLabel.Parent = TitleFrame
 
-	--// Create buttons (Minimize, Maximize, Close)
-	buttonContainer = Instance.new("Frame")
+	--// Create buttons (Minimize, Maximize, Close) - WindUI style
+	local buttonContainer = Instance.new("Frame")
 	buttonContainer.Name = "Buttons"
-	buttonContainer.Size = UDim2.new(0, 96, 1, 0)
-	buttonContainer.Position = UDim2.new(1, -100, 0, 0)
+	buttonContainer.Size = UDim2.new(0, 90, 1, 0)
+	buttonContainer.Position = UDim2.new(1, -90, 0, 0)
 	buttonContainer.BackgroundTransparency = 1
 	buttonContainer.Parent = TopBar
 
-	-- Button definitions
+	-- Button definitions with proper icons
 	local buttons = {
 		{name = "Minimize", icon = "rbxassetid://103626408777602", position = 0},
-		{name = "Maximize", icon = "rbxassetid://6031090978", position = 32},
-		{name = "Close", icon = "rbxassetid://117747448917698", position = 64},
+		{name = "Maximize", icon = "rbxassetid://6031090978", position = 30},
+		{name = "Close", icon = "rbxassetid://117747448917698", position = 60},
 	}
 
 	for _, btnData in ipairs(buttons) do
@@ -697,6 +698,7 @@ function Library:CreateWindow(Settings)
 		button.BackgroundTransparency = 0
 		button.Parent = buttonContainer
 		
+		-- Add icon
 		local icon = Instance.new("ImageLabel")
 		icon.Size = UDim2.new(0, 14, 0, 14)
 		icon.Position = UDim2.new(0.5, -7, 0.5, -7)
@@ -704,6 +706,7 @@ function Library:CreateWindow(Settings)
 		icon.Image = btnData.icon
 		icon.Parent = button
 		
+		-- Hover effect
 		button.MouseEnter:Connect(function()
 			if btnData.name == "Close" then
 				button.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
@@ -715,6 +718,7 @@ function Library:CreateWindow(Settings)
 			button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 		end)
 		
+		-- Button functionality
 		if btnData.name == "Close" then
 			button.MouseButton1Click:Connect(function()
 				local confirmFrame = Instance.new("Frame")
@@ -722,7 +726,7 @@ function Library:CreateWindow(Settings)
 				confirmFrame.Position = UDim2.new(0.5, -150, 0.5, -70)
 				confirmFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 				confirmFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-				confirmFrame.BorderSize = 0
+				confirmFrame.BackgroundTransparency = 0
 				confirmFrame.Parent = Window
 				
 				local uiStroke = Instance.new("UIStroke")
@@ -818,7 +822,7 @@ function Library:CreateWindow(Settings)
 						MinimizedBar.AnchorPoint = Vector2.new(0.5, 0)
 						MinimizedBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 						MinimizedBar.BackgroundTransparency = 0
-						MinimizedBar.BorderSize = 0
+						MinimizedBar.BorderSizePixel = 0
 						MinimizedBar.ZIndex = 100
 						MinimizedBar.Parent = game.CoreGui
 						
@@ -1060,7 +1064,6 @@ function Library:CreateWindow(Settings)
 		})
 	end
 	
-	-- UPDATED: Button with theme-aware colors
 	function Options:AddButton(Settings: { Title: string, Description: string, Tab: Instance, Callback: any }) 
 		local Button = Clone(Components:FindFirstChild("Button"));
 		local Title, Description = Options:GetLabels(Button);
@@ -1099,7 +1102,6 @@ function Library:CreateWindow(Settings)
 		})
 	end
 
-	-- UPDATED: Toggle with theme accent color
 	function Options:AddToggle(Settings: { Title: string, Description: string, Default: boolean, Tab: Instance, Callback: any }) 
 		local Toggle = Clone(Components:FindFirstChild("Toggle"));
 		local Title, Description = Options:GetLabels(Toggle);
@@ -1110,7 +1112,6 @@ function Library:CreateWindow(Settings)
 		
 		local Set = function(Value)
 			if Value then
-				-- Use theme accent color (Tab color from current theme)
 				local accentColor = Theme.Tab or Color3.fromRGB(153, 155, 255)
 				Tween(Main, .2, { BackgroundColor3 = accentColor })
 				Tween(Circle, .2, { BackgroundColor3 = Color3.fromRGB(255, 255, 255), Position = UDim2.new(1, -16, 0.5, 0) })
@@ -1258,7 +1259,6 @@ function Library:CreateWindow(Settings)
 		})
 	end
 
-	-- UPDATED: Slider with theme accent color
 	function Options:AddSlider(Settings: { Title: string, Description: string, MaxValue: number, AllowDecimals: boolean, DecimalAmount: number, Tab: Instance, Callback: any }) 
 		local Slider = Clone(Components:FindFirstChild("Slider"));
 		local Title, Description = Options:GetLabels(Slider);
@@ -1293,7 +1293,6 @@ function Library:CreateWindow(Settings)
 			
 			Value = SetNumber(Number or (Scale * Settings.MaxValue))
 			Amount.Text = Value
-			-- Use theme accent color for fill
 			local accentColor = Theme.Tab or Color3.fromRGB(153, 155, 255)
 			Fill.BackgroundColor3 = accentColor
 			Fill.Size = UDim2.fromScale((Number and Number / Settings.MaxValue) or Scale, 1)
@@ -1319,7 +1318,6 @@ function Library:CreateWindow(Settings)
 		end)
 
 		Fill.Size = UDim2.fromScale(Value, 1);
-		-- Set initial fill color
 		Fill.BackgroundColor3 = Theme.Tab or Color3.fromRGB(153, 155, 255)
 		Animations:Component(Slider);
 		SetProperty(Title, { Text = Settings.Title });
@@ -1343,7 +1341,6 @@ function Library:CreateWindow(Settings)
 		})
 	end
 	
-	-- NEW: Config management functions for UI
 	function Options:SaveConfig(name)
 		if not name or name == "" then
 			name = "Config_" .. os.date("%Y%m%d_%H%M%S")
@@ -1364,7 +1361,6 @@ function Library:CreateWindow(Settings)
 				Description = "Loaded: " .. name,
 				Duration = 3
 			})
-			-- Refresh UI to show loaded settings
 			if Options.SetTheme and Setup.CurrentThemeName then
 				Options:SetTheme(Setup.CurrentThemeName)
 			end
