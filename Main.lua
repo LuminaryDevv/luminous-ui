@@ -634,14 +634,13 @@ function Library:CreateWindow(Settings)
 
 	-- topbar setup
 	local TopBar = Sidebar.Top
+
+	TopBar.Size = UDim2.new(1, 0, 0, 40)
+	TopBar.ClipsDescendants = false
 	
-	-- Clear existing children
-	for _, child in ipairs(TopBar:GetChildren()) do
-		if child:IsA("Frame") or child:IsA("TextLabel") then
-			child:Destroy()
-		end
-	end
-	
+	if child:IsA("TextLabel") then
+	child:Destroy()
+end	
 	-- Title area
 	local TitleFrame = Instance.new("Frame")
 	TitleFrame.Name = "TitleFrame"
@@ -677,8 +676,8 @@ function Library:CreateWindow(Settings)
 	-- topbar buttons
 	local buttonContainer = Instance.new("Frame")
 	buttonContainer.Name = "Buttons"
-	buttonContainer.Size = UDim2.new(0, 90, 1, 0)
-	buttonContainer.Position = UDim2.new(1, -90, 0, 0)
+    buttonContainer.Size = UDim2.new(0, 100, 0, 40)
+    buttonContainer.Position = UDim2.new(1, -100, 0, 0)
 	buttonContainer.BackgroundTransparency = 1
 	buttonContainer.Parent = TopBar
 
@@ -692,7 +691,7 @@ function Library:CreateWindow(Settings)
 	for _, btnData in ipairs(buttons) do
 		local button = Instance.new("ImageButton")
 		button.Name = btnData.name
-		button.Size = UDim2.new(0, 28, 1, 0)
+		button.Size = UDim2.new(0, 28, 0, 28)
 		button.Position = UDim2.new(0, btnData.position, 0, 0)
 		button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 		button.BackgroundTransparency = 0
@@ -704,6 +703,7 @@ function Library:CreateWindow(Settings)
 		icon.Position = UDim2.new(0.5, -7, 0.5, -7)
 		icon.BackgroundTransparency = 1
 		icon.Image = btnData.icon
+		icon.ScaleType = Enum.ScaleType.Fit
 		icon.Parent = button
 		
 		-- Hover
