@@ -1590,29 +1590,6 @@ function Options:SetTheme(Info)
 				end)
 			end
 			
-		else
-			warn("[Luminous UI]: Theme '" .. Info .. "' not found")
-			return
-		end
-	else
-		Theme = Info or Theme
-	end
-
-	Window.BackgroundColor3 = Theme.Primary
-	Holder.BackgroundColor3 = Theme.Secondary
-	
-	if Window:FindFirstChildOfClass("UIStroke") then
-		Window:FindFirstChildOfClass("UIStroke").Color = Theme.Shadow
-	end
-	
-	local TopBar = Sidebar.Top
-	if TopBar then
-		TopBar.BackgroundColor3 = Theme.Secondary
-	end
-
-	ApplyTheme()
-end
-			
 			else
 				warn("[Luminous UI]: Theme '" .. Info .. "' not found, using current theme")
 				return
