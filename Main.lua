@@ -1589,9 +1589,6 @@ function Options:SetTheme(Info)
 					ApplyTheme()
 				end)
 			end
-			Theme = Info or Theme
-		    Setup.CurrentThemeName = nil
-			end
 
 		Window.BackgroundColor3 = Theme.Primary
 		Holder.BackgroundColor3 = Theme.Secondary
