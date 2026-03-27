@@ -1589,12 +1589,6 @@ function Options:SetTheme(Info)
 					ApplyTheme()
 				end)
 			end
-			
-			else
-				warn("[Luminous UI]: Theme '" .. Info .. "' not found, using current theme")
-				return
-			end
-		else
 			Theme = Info or Theme
 		end
 
