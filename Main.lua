@@ -1590,7 +1590,8 @@ function Options:SetTheme(Info)
 				end)
 			end
 			Theme = Info or Theme
-		end
+		    Setup.CurrentThemeName = nil
+			end
 
 		Window.BackgroundColor3 = Theme.Primary
 		Holder.BackgroundColor3 = Theme.Secondary
@@ -1598,7 +1599,7 @@ function Options:SetTheme(Info)
 			Window:FindFirstChildOfClass("UIStroke").Color = Theme.Shadow
 		end
 		
-		-- Update TopBar color if it exists
+	    -- Update TopBar
 		local TopBar = Sidebar.Top
 		if TopBar then
 			TopBar.BackgroundColor3 = Theme.Secondary
