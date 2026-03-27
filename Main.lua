@@ -1559,29 +1559,60 @@ function Library:CreateWindow(Settings)
 		},
 	}
 
-	function Options:SetTheme(Info)
-		-- Stop previous rainbow animation if it exists
-		if rainbowConnection then
-			rainbowConnection:Disconnect()
-			rainbowConnection = nil
+function Options:SetTheme(Info)
+	if rainbowConnection then
+		rainbowConnection:Disconnect()
+		rainbowConnection = nil
+	end
+	
+	if type(Info) == "string" then
+		if BuiltInThemes[Info] then
+			Theme = BuiltInThemes[Info]
+			Setup.CurrentThemeName = Info
+			
+			if Theme.Dynamic then
+				rainbowHue = 0
+				rainbowConnection = game:GetService("RunService").RenderStepped:Connect(function(dt)
+					rainbowHue = (rainbowHue + dt * 0.1) % 1
+					
+					local main = Color3.fromHSV(rainbowHue, 1, 1)
+					local secondary = Color3.fromHSV((rainbowHue + 0.05) % 1, 0.9, 1)
+					local accent = Color3.fromHSV((rainbowHue + 0.1) % 1, 1, 1)
+
+					Theme.Tab = main
+					Theme.Accent = accent
+					Theme.Title = main
+					Theme.Description = secondary
+					Theme.Icon = accent
+					Theme.Outline = main
+
+					ApplyTheme()
+				end)
+			end
+			
+		else
+			warn("[Luminous UI]: Theme '" .. Info .. "' not found")
+			return
 		end
-		
-		if type(Info) == "string" then
-			if BuiltInThemes[Info] then
-				Theme = BuiltInThemes[Info]
-				Setup.CurrentThemeName = Info
-				
-				-- Handle dynamic Rainbow theme
-				if Theme.Dynamic then
-					rainbowHue = 0
-					rainbowConnection = game:GetService("RunService").RenderStepped:Connect(function(dt)
-						rainbowHue = (rainbowHue + dt * 0.1) % 1
-						local rainbowColor = Color3.fromHSV(rainbowHue, 0.8, 1)
-						Theme.Tab = rainbowColor
-						Theme.Accent = rainbowColor
-						ApplyTheme()
-					end)
-				end
+	else
+		Theme = Info or Theme
+	end
+
+	Window.BackgroundColor3 = Theme.Primary
+	Holder.BackgroundColor3 = Theme.Secondary
+	
+	if Window:FindFirstChildOfClass("UIStroke") then
+		Window:FindFirstChildOfClass("UIStroke").Color = Theme.Shadow
+	end
+	
+	local TopBar = Sidebar.Top
+	if TopBar then
+		TopBar.BackgroundColor3 = Theme.Secondary
+	end
+
+	ApplyTheme()
+end
+			
 			else
 				warn("[Luminous UI]: Theme '" .. Info .. "' not found, using current theme")
 				return
