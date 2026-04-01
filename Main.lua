@@ -1067,6 +1067,8 @@ function Library:CreateWindow(Settings)
 		return Main.ScrollingFrame
 	end
 	
+	--// Notifications
+	
 	function Options:Notify(Settings) 
 		local Notification = Clone(Components:FindFirstChild("Notification"))
 		local Title, Description = Options:GetLabels(Notification)
@@ -1089,6 +1091,8 @@ function Library:CreateWindow(Settings)
 			Notification:Destroy()
 		end)
 	end
+
+	--// Component Functions
 
 	function Options:GetLabels(Component)
 		local Labels = Component:FindFirstChild("Labels")
@@ -1559,36 +1563,45 @@ function Library:CreateWindow(Settings)
 		},
 	}
 
-function Options:SetTheme(Info)
-	if rainbowConnection then
-		rainbowConnection:Disconnect()
-		rainbowConnection = nil
-	end
-	
-	if type(Info) == "string" then
-		if BuiltInThemes[Info] then
-			Theme = BuiltInThemes[Info]
-			Setup.CurrentThemeName = Info
-			
-			if Theme.Dynamic then
-				rainbowHue = 0
-				rainbowConnection = game:GetService("RunService").RenderStepped:Connect(function(dt)
-					rainbowHue = (rainbowHue + dt * 0.1) % 1
-					
-					local main = Color3.fromHSV(rainbowHue, 1, 1)
-					local secondary = Color3.fromHSV((rainbowHue + 0.05) % 1, 0.9, 1)
-					local accent = Color3.fromHSV((rainbowHue + 0.1) % 1, 1, 1)
+	function Options:SetTheme(Info)
+		-- Stop previous rainbow animation
+		if rainbowConnection then
+			rainbowConnection:Disconnect()
+			rainbowConnection = nil
+		end
+		
+		if type(Info) == "string" then
+			if BuiltInThemes[Info] then
+				Theme = BuiltInThemes[Info]
+				Setup.CurrentThemeName = Info
+				
+				-- Dynamic Rainbow theme
+				if Theme.Dynamic then
+					rainbowHue = 0
+					rainbowConnection = game:GetService("RunService").RenderStepped:Connect(function(dt)
+						rainbowHue = (rainbowHue + dt * 0.1) % 1
+						
+						local main = Color3.fromHSV(rainbowHue, 1, 1)
+						local secondary = Color3.fromHSV((rainbowHue + 0.05) % 1, 0.9, 1)
+						local accent = Color3.fromHSV((rainbowHue + 0.1) % 1, 1, 1)
 
-					Theme.Tab = main
-					Theme.Accent = accent
-					Theme.Title = main
-					Theme.Description = secondary
-					Theme.Icon = accent
-					Theme.Outline = main
+						Theme.Tab = main
+						Theme.Accent = accent
+						Theme.Title = main
+						Theme.Description = secondary
+						Theme.Icon = accent
+						Theme.Outline = main
 
-					ApplyTheme()
-				end)
+						ApplyTheme()
+					end)
+				end
+			else
+				warn("[Luminous UI]: Theme '" .. Info .. "' not found, using current theme")
+				return
 			end
+		else
+			Theme = Info or Theme
+		end
 
 		Window.BackgroundColor3 = Theme.Primary
 		Holder.BackgroundColor3 = Theme.Secondary
@@ -1596,7 +1609,7 @@ function Options:SetTheme(Info)
 			Window:FindFirstChildOfClass("UIStroke").Color = Theme.Shadow
 		end
 		
-	    -- Update TopBar
+		-- Update TopBar color
 		local TopBar = Sidebar.Top
 		if TopBar then
 			TopBar.BackgroundColor3 = Theme.Secondary
